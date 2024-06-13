@@ -1,10 +1,10 @@
 import streamlit as st
 from dotenv import load_dotenv
 from youtube_transcript_api import YouTubeTranscriptApi
-
-load_dotenv()  # Cargar todas las variables de entorno
 import os
 import google.generativeai as genai
+
+load_dotenv()  # Cargar todas las variables de entorno
 
 # Configurar la API de Gemini
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -15,10 +15,10 @@ and summarizing the entire video and providing the important summary in points
 within 250 words. Please provide the summary of the text given here: """
 
 # Obtener los detalles de la transcripción de los videos de YouTube
-def extract_transcript_details(youtube_video_url):
+def extract_transcript_details(youtube_video_url, language="es"):
     try:
         video_id = youtube_video_url.split("=")[1]
-        transcript_text = YouTubeTranscriptApi.get_transcript(video_id)
+        transcript_text = YouTubeTranscriptApi.get_transcript(video_id, languages=[language])
 
         transcript = ""
         for i in transcript_text:
