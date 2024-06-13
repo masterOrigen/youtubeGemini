@@ -57,7 +57,6 @@ if st.button("Get Detailed Notes"):
         st.markdown("## Transcription:")
         st.write(transcript_text)
 
-        st.markdown("## Ask Questions:")
         user_question = st.text_area("Type your question here:")
         if st.button("Submit Question"):
             st.write("You asked:", user_question)
