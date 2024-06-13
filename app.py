@@ -1,58 +1,70 @@
+import os
 import streamlit as st
+import requests
 from dotenv import load_dotenv
 
-load_dotenv() ##load all the nevironment variables
-import os
-import google.generativeai as genai
+# Cargar las variables de entorno desde el archivo .env
+load_dotenv()
 
-from youtube_transcript_api import YouTubeTranscriptApi
+# Obtener la API key de Gemini desde las variables de entorno
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+# Funciones para obtener la transcripción de un video de YouTube y hacer preguntas sobre la transcripción
+def get_transcript_from_youtube_video(youtube_url):
+    gemini_api_url = "https://api.gemini.com/transcribe-youtube-video"
+    headers = {"Authorization": f"Bearer {GEMINI_API_KEY}"}
+    payload = {"youtube_url": youtube_url}
+    response = requests.post(gemini_api_url, json=payload, headers=headers)
+    if response.status_code == 200:
+        return response.json()["transcript"]
+    else:
+        return None
 
-prompt="""Eres un resumidor de vídeos de Yotube. Tomarás el texto de la transcripción.
-y resumir todo el video y proporcionaras el resumen importante en puntos
-dentro de 500 palabras. Proporcione el resumen del texto que se proporciona aquí:  """
+def ask_question_about_transcript(question, transcript):
+    gemini_api_url = "https://api.gemini.com/ask-question"
+    headers = {"Authorization": f"Bearer {GEMINI_API_KEY}"}
+    payload = {"question": question, "transcript": transcript}
+    response = requests.post(gemini_api_url, json=payload, headers=headers)
+    if response.status_code == 200:
+        return response.json()["answer"]
+    else:
+        return None
 
+# Configuración de la página
+st.set_page_config(page_title="Gemini AI - YouTube Transcript", layout="wide")
 
-## getting the transcript data from yt videos
-def extract_transcript_details(youtube_video_url):
-    try:
-        video_id=youtube_video_url.split("=")[1]
-        
-        transcript_text=YouTubeTranscriptApi.get_transcript(video_id)
+# Título de la aplicación
+st.title("Gemini AI - YouTube Transcript")
 
-        transcript = ""
-        for i in transcript_text:
-            transcript += " " + i["text"]
+# Input para ingresar la URL del video de YouTube
+youtube_url = st.text_input("Ingresa la URL del video de YouTube:")
 
-        return transcript
+# Botón para obtener la transcripción del video
+if st.button("Obtener Transcripción"):
+    if youtube_url:
+        transcript = get_transcript_from_youtube_video(youtube_url)
+        if transcript:
+            st.header("Transcripción del Video:")
+            st.write(transcript)
+        else:
+            st.error("Ocurrió un error al obtener la transcripción del video.")
+    else:
+        st.warning("Por favor ingresa la URL del video de YouTube.")
 
-    except Exception as e:
-        raise e
-    
-## getting the summary based on Prompt from Google Gemini Pro
-def generate_gemini_content(transcript_text,prompt):
+# Input para realizar preguntas sobre la transcripción
+question = st.text_input("Haz una pregunta sobre la transcripción del video:")
 
-    model=genai.GenerativeModel("gemini-pro")
-    response=model.generate_content(prompt+transcript_text)
-    return response.text
-
-st.title("YouTube Transcript to Detailed Notes Converter")
-youtube_link = st.text_input("Enter YouTube Video Link:")
-
-if youtube_link:
-    video_id = youtube_link.split("=")[1]
-    print(video_id)
-    st.image(f"http://img.youtube.com/vi/{video_id}/0.jpg", use_column_width=True)
-
-if st.button("Get Detailed Notes"):
-    transcript_text=extract_transcript_details(youtube_link)
-
-    if transcript_text:
-        summary=generate_gemini_content(transcript_text,prompt)
-        st.markdown("## Detailed Notes:")
-        st.write(summary)
-
-
-
-
+# Botón para obtener la respuesta a la pregunta
+if st.button("Obtener Respuesta"):
+    if question:
+        if transcript:
+            answer = ask_question_about_transcript(question, transcript)
+            if answer:
+                st.header("Respuesta:")
+                st.write(answer)
+            else:
+                st.error("Ocurrió un error al obtener la respuesta.")
+        else:
+            st.warning("Primero obtén la transcripción del video antes de hacer una pregunta.")
+    else:
+        st.warning("Por favor ingresa una pregunta.")
