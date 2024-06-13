@@ -1,104 +1,54 @@
-import os
 import streamlit as st
-import requests
 from dotenv import load_dotenv
-from googleapiclient.discovery import build
 
-# Cargar las variables de entorno desde el archivo .env
-load_dotenv()
+load_dotenv() ##load all the nevironment variables
+import os
+import google.generativeai as genai
 
-# Obtener la API key de YouTube desde las variables de entorno
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+from youtube_transcript_api import YouTubeTranscriptApi
 
-# Función para obtener la transcripción de un video de YouTube utilizando la API de Google
-def obtener_transcripcion_youtube(url_video):
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+prompt="""You are Yotube video summarizer. You will be taking the transcript text
+and summarizing the entire video and providing the important summary in points
+within 250 words. Please provide the summary of the text given here:  """
+
+
+## getting the transcript data from yt videos
+def extract_transcript_details(youtube_video_url):
     try:
-        # Extraer el ID del video de la URL
-        video_id = obtener_video_id(url_video)
+        video_id=youtube_video_url.split("=")[1]
         
-        # Construir el servicio de la API de YouTube
-        youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
-        
-        # Obtener detalles del video
-        video_response = youtube.videos().list(
-            part="snippet",
-            id=video_id
-        ).execute()
+        transcript_text=YouTubeTranscriptApi.get_transcript(video_id)
 
-        # Extraer el título del video
-        video_title = video_response["items"][0]["snippet"]["title"]
+        transcript = ""
+        for i in transcript_text:
+            transcript += " " + i["text"]
 
-        # Obtener subtítulos (si están disponibles)
-        captions_response = youtube.captions().list(
-            part="id",
-            videoId=video_id
-        ).execute()
+        return transcript
 
-        if captions_response["items"]:
-            # Obtener el ID del subtítulo
-            caption_id = captions_response["items"][0]["id"]
-
-            # Descargar la transcripción del subtítulo
-            transcript_response = youtube.captions().download(
-                id=caption_id,
-                tfmt="vtt"
-            ).execute()
-
-            # Convertir la transcripción a texto plano
-            transcript_text = convertir_transcripcion(transcript_response)
-
-            return transcript_text, video_title
-        else:
-            return None, video_title
     except Exception as e:
-        st.error("Error al obtener la transcripción del video: {}".format(e))
-        return None, None
-
-# Función para extraer el ID del video de una URL de YouTube
-def obtener_video_id(url):
-    if "youtube.com" in url:
-        video_id = url.split("v=")[1]
-        return video_id
-    elif "youtu.be" in url:
-        video_id = url.split("/")[-1]
-        return video_id
-    else:
-        return None
-
-# Función para convertir la transcripción en formato WebVTT a texto plano
-def convertir_transcripcion(transcript_response):
-    # Extraer el texto de la transcripción en formato WebVTT
-    vtt_text = transcript_response.decode("utf-8")
+        raise e
     
-    # Eliminar las etiquetas HTML y los timestamps
-    lines = vtt_text.split("\n")
-    text = ""
-    for line in lines:
-        if not line.strip().isdigit():
-            text += line.strip() + " "
-    
-    return text
+## getting the summary based on Prompt from Google Gemini Pro
+def generate_gemini_content(transcript_text,prompt):
 
-# Configurar la página de Streamlit
-st.set_page_config(
-    page_title="Obtener Transcripción de Video de YouTube",
-    layout="centered"
-)
+    model=genai.GenerativeModel("gemini-pro")
+    response=model.generate_content(prompt+transcript_text)
+    return response.text
 
-# Título de la aplicación
-st.title("Obtener Transcripción de Video de YouTube")
+st.title("YouTube Transcript to Detailed Notes Converter")
+youtube_link = st.text_input("Enter YouTube Video Link:")
 
-# Entrada de texto para ingresar la URL del video de YouTube
-url_video_youtube = st.text_input("Ingresa la URL del video de YouTube:")
+if youtube_link:
+    video_id = youtube_link.split("=")[1]
+    print(video_id)
+    st.image(f"http://img.youtube.com/vi/{video_id}/0.jpg", use_column_width=True)
 
-# Botón para obtener la transcripción del video
-if st.button("Obtener Transcripción"):
-    if url_video_youtube:
-        transcripcion, titulo_video = obtener_transcripcion_youtube(url_video_youtube)
-        if transcripcion:
-            st.write("Transcripción del video '{}'".format(titulo_video))
-            st.write(transcripcion)
-        else:
-            st.warning("No se encontraron subtítulos para el video.")
-    else:
-        st.warning("Por favor ingresa la URL del video de YouTube.")
+if st.button("Get Detailed Notes"):
+    transcript_text=extract_transcript_details(youtube_link)
+
+    if transcript_text:
+        summary=generate_gemini_content(transcript_text,prompt)
+        st.markdown("## Detailed Notes:")
+        st.write(summary)
