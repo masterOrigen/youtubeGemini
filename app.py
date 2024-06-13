@@ -36,6 +36,13 @@ def generate_gemini_content(transcript_text, prompt):
     response = model.generate_content(prompt + transcript_text)
     return response.text
 
+# Procesar la pregunta y obtener una respuesta
+def process_question(question, transcript_text):
+    # Aquí puedes agregar la lógica para procesar la pregunta y obtener una respuesta.
+    # Por ejemplo, podrías usar técnicas de procesamiento de lenguaje natural.
+    # En este ejemplo de demostración, simplemente devolvemos una respuesta aleatoria.
+    return "Esta es una respuesta de ejemplo a tu pregunta: " + question
+
 st.title("YouTube Transcript to Detailed Notes Converter")
 youtube_link = st.text_input("Enter YouTube Video Link:")
 
@@ -47,6 +54,12 @@ if st.button("Get Detailed Notes"):
     transcript_text = extract_transcript_details(youtube_link)
 
     if transcript_text:
-        summary = generate_gemini_content(transcript_text, prompt)
-        st.markdown("## Detailed Notes:")
-        st.write(summary)
+        st.markdown("## Transcription:")
+        st.write(transcript_text)
+
+        st.markdown("## Ask Questions:")
+        user_question = st.text_area("Type your question here:")
+        if st.button("Submit Question"):
+            st.write("You asked:", user_question)
+            answer = process_question(user_question, transcript_text)
+            st.write("Answer:", answer)
