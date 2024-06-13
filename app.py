@@ -27,7 +27,7 @@ def extract_transcript_details(youtube_video_url, language="es"):
         return transcript
 
     except Exception as e:
-        st.error(f"Error al obtener la transcripción del video: {e}")
+        st.warning(f"El video no tiene transcripción disponible: {e}")
         st.stop()
 
 # Generar el contenido utilizando Gemini Pro
