@@ -3,11 +3,15 @@ from dotenv import load_dotenv
 from youtube_transcript_api import YouTubeTranscriptApi
 import os
 import google.generativeai as genai
+import spacy
 
 load_dotenv()  # Cargar todas las variables de entorno
 
 # Configurar la API de Gemini
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+# Cargar el modelo de procesamiento de lenguaje natural (en este caso, spaCy en español)
+nlp = spacy.load("es_core_news_sm")
 
 # Prompt para la generación de resúmenes
 prompt = """You are YouTube video summarizer. You will be taking the transcript text
@@ -36,12 +40,27 @@ def generate_gemini_content(transcript_text, prompt):
     response = model.generate_content(prompt + transcript_text)
     return response.text
 
-# Procesar la pregunta y obtener una respuesta
+# Procesar la pregunta y obtener una respuesta basada en el contenido del video
 def process_question(question, transcript_text):
-    # Aquí puedes agregar la lógica para procesar la pregunta y obtener una respuesta.
-    # Por ejemplo, podrías usar técnicas de procesamiento de lenguaje natural.
-    # En este ejemplo de demostración, simplemente devolvemos una respuesta aleatoria.
-    return "Esta es una respuesta de ejemplo a tu pregunta: " + question
+    # Analizar la pregunta utilizando spaCy
+    doc = nlp(question)
+    
+    # Extraer entidades nombradas relevantes de la pregunta
+    relevant_entities = [ent.text for ent in doc.ents if ent.label_ in ["ORG", "PERSON", "WORK_OF_ART"]]
+    
+    # Realizar búsqueda de las entidades en la transcripción
+    relevant_sentences = []
+    for sentence in transcript_text.split("."):
+        for entity in relevant_entities:
+            if entity.lower() in sentence.lower():
+                relevant_sentences.append(sentence.strip())
+                break
+    
+    # Devolver la respuesta como un resumen de las oraciones relevantes
+    if relevant_sentences:
+        return ". ".join(relevant_sentences)
+    else:
+        return "Lo siento, no pude encontrar información relevante en el video para responder a tu pregunta."
 
 st.title("Transcripción de Videos")
 youtube_link = st.text_input("Ingresa link del video Youtube:")
@@ -57,7 +76,7 @@ if st.button("Procesar"):
         st.markdown("## Transcripción:")
         st.write(transcript_text)
 
-        user_question = st.text_area("Ecribe tu pregunta:")
+        user_question = st.text_area("Escribe tu pregunta:")
         if st.button("Enviar pregunta"):
             st.write("Tu Pregunta:", user_question)
             answer = process_question(user_question, transcript_text)
