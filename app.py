@@ -43,7 +43,7 @@ def process_question(question, transcript_text):
     # En este ejemplo de demostración, simplemente devolvemos una respuesta aleatoria.
     return "Esta es una respuesta de ejemplo a tu pregunta: " + question
 
-st.title("YouTube Transcript to Detailed Notes Converter")
+st.title("Transcripción de Videos")
 youtube_link = st.text_input("Ingresa link del video Youtube:")
 
 if youtube_link:
