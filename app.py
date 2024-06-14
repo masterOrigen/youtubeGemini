@@ -46,9 +46,9 @@ if 'messages' not in st.session_state:
 if 'welcome' not in st.session_state or lang != st.session_state.lang:
     st.session_state.lang = lang
     welcome = model.generate_content(f'''
-    Da un saludo de bienvenida al usuario y sugiere que puede hacer
-    (Puedes describir imágenes, responder preguntas, leer archivos texto, leer tablas, etc.)
-    Eres un chatbot en una aplicación de chat creada en Streamlit y Python. Generar la respuesta en {lang}''')
+    Da un saludo de bienvenida al usuario y sugiere qué puede hacer
+    (Puedes describir imágenes, responder preguntas, leer archivos de texto, leer tablas, etc.)
+    Eres un chatbot en una aplicación de chat creada en Streamlit y Python. Genera la respuesta en {lang}''')
     welcome.resolve()
     st.session_state.welcome = welcome
 
@@ -72,7 +72,7 @@ if len(st.session_state.chat_session) > 0:
 
 # Opciones de adjuntos
 st.write("Opciones de adjuntos:")
-cols = st.columns(3)
+cols = st.columns(4)
 
 with cols[0]:
     image_atachment = st.checkbox("Adjuntar imagen", value=False, help="Activa este modo para adjuntar una imagen y que el chatbot pueda leerla")
@@ -80,6 +80,8 @@ with cols[1]:
     txt_atachment = st.checkbox("Adjuntar archivo de texto", value=False, help="Activa este modo para adjuntar un archivo de texto y que el chatbot pueda leerlo")
 with cols[2]:
     csv_excel_atachment = st.checkbox("Adjuntar CSV o Excel", value=False, help="Activa este modo para adjuntar un archivo CSV o Excel y que el chatbot pueda leerlo")
+with cols[3]:
+    graphviz_mode = False
 
 # Adjunto de imagen
 if image_atachment:
