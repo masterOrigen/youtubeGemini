@@ -3,7 +3,7 @@ streamlit
 google-generativeai
 python-dotenv
 pathlib
-spacy
+spacy==3.1.2
 es-core-news-sm
 
 
