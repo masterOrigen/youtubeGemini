@@ -2,7 +2,7 @@ google-generativeai
 pandas
 numpy
 openpyxl
-PyPDF2
+PyPDF4
 
 
 
