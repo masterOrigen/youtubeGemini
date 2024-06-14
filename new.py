@@ -143,8 +143,8 @@ if prompt:
     if len(txt) > 5000:
         txt = txt[:5000] + '...'
 
-    if image or url != '':
-        if url != '':
+    if image or url:
+        if url:
             img = Image.open(requests.get(url, stream=True).raw)
         else:
             img = Image.open(image)
