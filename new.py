@@ -90,7 +90,7 @@ with cols[0]:
     image_atachment = st.toggle("Adjuntar imagen", value=False, help="Activa este modo para adjuntar una imagen y que el chatbot pueda leerla")
 
 with cols[1]:
-    txt_atachment = st.toggle("Adjuntar archivo PDF", value=False, help="Activa este modo para adjuntar un archivo PDF y que el chatbot pueda leerlo")
+    pdf_atachment = st.toggle("Adjuntar archivo PDF", value=False, help="Activa este modo para adjuntar un archivo PDF y que el chatbot pueda leerlo")
 
 with cols[2]:
     csv_excel_atachment = st.toggle("Adjuntar CSV o Excel", value=False, help="Activa este modo para adjuntar un archivo CSV o Excel y que el chatbot pueda leerlo")
@@ -106,7 +106,7 @@ else:
     image = None
     url = ''
 
-if txt_atachment:
+if pdf_atachment:
     pdf_file = st.file_uploader("Sube tu archivo PDF", type=['pdf'])
 else:
     pdf_file = None
@@ -135,13 +135,14 @@ if prompt:
             df = pd.read_csv(csvexcelattachment)
         except:
             df = pd.read_excel(csvexcelattachment)
-        txt += '   Dataframe: \n' + str(df)
+        txt += '\n' + df.to_string()
 
     if graphviz_mode:
         txt += '   Genera un grafo con graphviz en .dot \n'
 
     if len(txt) > 5000:
         txt = txt[:5000] + '...'
+
     if image or url != '':
         if url != '':
             img = Image.open(requests.get(url, stream=True).raw)
