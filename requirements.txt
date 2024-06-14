@@ -1,7 +1,9 @@
 streamlit
 python-dotenv
 youtube-transcript-api
-google
+google-generative-ai
 spacy
+es-core-news-sm
+
 
 
