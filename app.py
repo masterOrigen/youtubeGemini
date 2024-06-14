@@ -75,11 +75,11 @@ st.write("Opciones de adjuntos:")
 cols = st.columns(3)
 
 with cols[0]:
-    image_atachment = st.checkbox("Adjuntar imagen", value=False, help="Activa este modo para adjuntar una imagen y que el chatbot pueda leerla", type="slider")
+    image_atachment = st.checkbox("Adjuntar imagen", value=False, help="Activa este modo para adjuntar una imagen y que el chatbot pueda leerla")
 with cols[1]:
-    txt_atachment = st.checkbox("Adjuntar archivo de texto", value=False, help="Activa este modo para adjuntar un archivo de texto y que el chatbot pueda leerlo", type="slider")
+    txt_atachment = st.checkbox("Adjuntar archivo de texto", value=False, help="Activa este modo para adjuntar un archivo de texto y que el chatbot pueda leerlo")
 with cols[2]:
-    csv_excel_atachment = st.checkbox("Adjuntar CSV o Excel", value=False, help="Activa este modo para adjuntar un archivo CSV o Excel y que el chatbot pueda leerlo", type="slider")
+    csv_excel_atachment = st.checkbox("Adjuntar CSV o Excel", value=False, help="Activa este modo para adjuntar un archivo CSV o Excel y que el chatbot pueda leerlo")
 
 # Adjunto de imagen
 if image_atachment:
