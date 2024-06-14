@@ -148,11 +148,7 @@ with cols[2]:
       csv_excel_atachment = st.toggle("Adjuntar CSV o Excel", value=False, help="Activa este modo para adjuntar un archivo CSV o Excel y que el chatbot pueda leerlo")
     else:
       csv_excel_atachment = st.toggle("Attach CSV or Excel", value=False, help="Activate this mode to attach a CSV or Excel file and let the chatbot read it")
-with cols[3]:
-    if lang == 'Español':
-      graphviz_mode = st.toggle("Modo graphviz", value=False, help="Activa este modo para generar un grafo con graphviz en .dot a partir de tu mensaje")
-    else:
-      graphviz_mode = st.toggle("Graphviz mode", value=False, help="Activate this mode to generate a graph with graphviz in .dot from your message")
+
 if image_atachment:
     if lang == 'Español':
       image = st.file_uploader("Sube tu imagen", type=['png', 'jpg', 'jpeg'])
