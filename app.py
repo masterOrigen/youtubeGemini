@@ -6,18 +6,18 @@ from PIL import Image
 import requests
 import PyPDF2
 
-# HEADER
-st.markdown('''
-Desarrollado por Google AI <img src="https://seeklogo.com/images/G/google-ai-logo-996E85F6FD-seeklogo.com.png" width="20" height="20">
-, Streamlit y Python''', unsafe_allow_html=True)
-st.caption("Por Sergio Demis Lopez Martinez")
-
-# CONFIGURACIÓN
+# CONFIGURACIÓN DE PÁGINA
 st.set_page_config(
     page_title="Chat de Google AI",
     page_icon="https://seeklogo.com/images/G/google-ai-logo-996E85F6FD-seeklogo.com.png",
     layout="wide",
 )
+
+# HEADER
+st.markdown('''
+Desarrollado por Google AI <img src="https://seeklogo.com/images/G/google-ai-logo-996E85F6FD-seeklogo.com.png" width="20" height="20">
+, Streamlit y Python''', unsafe_allow_html=True)
+st.caption("Por Sergio Demis Lopez Martinez")
 
 # FUNCIÓN PARA EXTRAER INFORMACIÓN DE GRAPHVIZ
 def extract_graphviz_info(text: str) -> list[str]:
@@ -173,5 +173,3 @@ if prompt:
             append_message({'role': 'model', 'parts': response.text})
         except Exception as e:
             append_message({'role': 'model', 'parts': f'{type(e).__name__}: {e}'})
-
-        st.rerun()
