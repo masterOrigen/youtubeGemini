@@ -27,6 +27,7 @@ st.caption("By Sergio Demis Lopez Martinez")
 #LANGUAGE
 # Columna de idioma
 lang = 'Español'
+st.divider()
 
 #------------------------------------------------------------
 #FUNCTIONS
