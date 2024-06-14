@@ -1,10 +1,6 @@
-youtube_transcript_api
-streamlit
 google-generativeai
-python-dotenv
-pathlib
-spacy==3.1.2
-es-core-news-sm
+pandas
+numpy
 
 
 
