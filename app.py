@@ -14,14 +14,14 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 nlp = spacy.load("es_core_news_sm")
 
 # Prompt para la generación de resúmenes
-prompt = """You are YouTube video summarizer. You will be taking the transcript text
-and summarizing the entire video and providing the important summary in points
-within 250 words. Please provide the summary of the text given here: """
+SUMMARY_PROMPT = """You are a YouTube video summarizer. You will take the transcript text
+and summarize the entire video, providing an important summary within 250 words.
+Please provide the summary of the text given here: """
 
 # Obtener los detalles de la transcripción de los videos de YouTube
-def extract_transcript_details(youtube_video_url, language="es"):
+def extract_transcript_details(video_url, language="es"):
     try:
-        video_id = youtube_video_url.split("=")[1]
+        video_id = video_url.split("=")[1]
         transcript_text = YouTubeTranscriptApi.get_transcript(video_id, languages=[language])
 
         transcript = ""
@@ -41,9 +41,9 @@ def generate_gemini_content(transcript_text, prompt):
     return response.text
 
 # Procesar la pregunta y obtener una respuesta basada en el contenido del video
-def process_question(input_text, transcript_text):
+def process_question(question, transcript_text):
     # Analizar la pregunta utilizando spaCy
-    doc = nlp(input_text)
+    doc = nlp(question)
     
     # Extraer entidades nombradas relevantes de la pregunta
     relevant_entities = [ent.text for ent in doc.ents if ent.label_ in ["ORG", "PERSON", "WORK_OF_ART"]]
@@ -62,22 +62,27 @@ def process_question(input_text, transcript_text):
     else:
         return "Lo siento, no pude encontrar información relevante en el video para responder a tu pregunta."
 
-st.title("Transcripción de Videos")
-youtube_link = st.text_input("Ingresa link del video Youtube:")
+# Interfaz de usuario
+def main():
+    st.title("Transcripción de Videos")
+    video_url = st.text_input("Ingresa el enlace del video de YouTube:")
 
-if youtube_link:
-    video_id = youtube_link.split("=")[1]
-    st.image(f"http://img.youtube.com/vi/{video_id}/0.jpg", use_column_width=True)
+    if video_url:
+        video_id = video_url.split("=")[1]
+        st.image(f"http://img.youtube.com/vi/{video_id}/0.jpg", use_column_width=True)
 
-if st.button("Procesar"):
-    transcript_text = extract_transcript_details(youtube_link)
+    if st.button("Procesar"):
+        transcript_text = extract_transcript_details(video_url)
 
-    if transcript_text:
-        st.markdown("## Transcripción:")
-        st.write(transcript_text)
+        if transcript_text:
+            st.markdown("## Transcripción:")
+            st.write(transcript_text)
 
-        user_question = st.text_area("Escribe tu pregunta:")
-        if st.button("Enviar pregunta"):
-            st.write("Tu Pregunta:", user_question)
-            answer = process_question(user_question, transcript_text)
-            st.write("Respuesta:", answer)
+            user_question = st.text_area("Escribe tu pregunta:")
+            if st.button("Enviar pregunta"):
+                st.write("Tu Pregunta:", user_question)
+                answer = process_question(user_question, transcript_text)
+                st.write("Respuesta:", answer)
+
+if __name__ == "__main__":
+    main()
