@@ -44,7 +44,7 @@ def process_question(question, transcript_text):
     return "Esta es una respuesta de ejemplo a tu pregunta: " + question
 
 st.title("YouTube Transcript to Detailed Notes Converter")
-youtube_link = st.text_input("Enter YouTube Video Link:")
+youtube_link = st.text_input("Ingresa link del video Youtube:")
 
 if youtube_link:
     video_id = youtube_link.split("=")[1]
@@ -54,11 +54,11 @@ if st.button("Get Detailed Notes"):
     transcript_text = extract_transcript_details(youtube_link)
 
     if transcript_text:
-        st.markdown("## Transcription:")
+        st.markdown("## Transcripción:")
         st.write(transcript_text)
 
-        user_question = st.text_area("Type your question here:")
-        if st.button("Submit Question"):
-            st.write("You asked:", user_question)
+        user_question = st.text_area("Ecribe tu pregunta:")
+        if st.button("Enviar pregunta"):
+            st.write("Tu Pregunta:", user_question)
             answer = process_question(user_question, transcript_text)
-            st.write("Answer:", answer)
+            st.write("Respuesta:", answer)
