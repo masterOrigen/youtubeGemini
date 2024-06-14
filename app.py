@@ -30,18 +30,7 @@ st.divider()
 
 #------------------------------------------------------------
 #FUNCTIONS
-def extract_graphviz_info(text: str) -> list[str]:
-  """
-  The function `extract_graphviz_info` takes in a text and returns a list of graphviz code blocks found in the text.
 
-  :param text: The `text` parameter is a string that contains the text from which you want to extract Graphviz information
-  :return: a list of strings that contain either the word "graph" or "digraph". These strings are extracted from the input
-  text.
-  """
-
-  graphviz_info  = text.split('```')
-
-  return [graph for graph in graphviz_info if ('graph' in graph or 'digraph' in graph) and ('{' in graph and '}' in graph)]
 
 def append_message(message: dict) -> None:
     """
