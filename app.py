@@ -71,9 +71,15 @@ if len(st.session_state.chat_session) > 0:
                     st.image(message['user']['parts'][1], width=200)
 
 # Opciones de adjuntos
-image_atachment = st.toggle("Adjuntar imagen", value=False, help="Activa este modo para adjuntar una imagen y que el chatbot pueda leerla")
-txt_atachment = st.toggle("Adjuntar archivo de texto", value=False, help="Activa este modo para adjuntar un archivo de texto y que el chatbot pueda leerlo")
-csv_excel_atachment = st.toggle("Adjuntar CSV o Excel", value=False, help="Activa este modo para adjuntar un archivo CSV o Excel y que el chatbot pueda leerlo")
+st.write("Opciones de adjuntos:")
+cols = st.columns(3)
+
+with cols[0]:
+    image_atachment = st.checkbox("Adjuntar imagen", value=False, help="Activa este modo para adjuntar una imagen y que el chatbot pueda leerla")
+with cols[1]:
+    txt_atachment = st.checkbox("Adjuntar archivo de texto", value=False, help="Activa este modo para adjuntar un archivo de texto y que el chatbot pueda leerlo")
+with cols[2]:
+    csv_excel_atachment = st.checkbox("Adjuntar CSV o Excel", value=False, help="Activa este modo para adjuntar un archivo CSV o Excel y que el chatbot pueda leerlo")
 
 # Adjunto de imagen
 if image_atachment:
