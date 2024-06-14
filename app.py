@@ -41,9 +41,9 @@ def generate_gemini_content(transcript_text, prompt):
     return response.text
 
 # Procesar la pregunta y obtener una respuesta basada en el contenido del video
-def process_question(question, transcript_text):
+def process_question(input_text, transcript_text):
     # Analizar la pregunta utilizando spaCy
-    doc = nlp(question)
+    doc = nlp(input_text)
     
     # Extraer entidades nombradas relevantes de la pregunta
     relevant_entities = [ent.text for ent in doc.ents if ent.label_ in ["ORG", "PERSON", "WORK_OF_ART"]]
