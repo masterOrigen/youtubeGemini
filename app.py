@@ -25,19 +25,8 @@ st.caption("By Sergio Demis Lopez Martinez")
 
 #------------------------------------------------------------
 #LANGUAGE
-langcols = st.columns([0.2,0.8])
-with langcols[0]:
-  lang = st.selectbox('Select your language',
-  ('English', 'Español', 'Français', 'Deutsch',
-  'Italiano', 'Português', 'Polski', 'Nederlands',
-  'Русский', '日本語', '한국어', '中文', 'العربية',
-  'हिन्दी', 'Türkçe', 'Tiếng Việt', 'Bahasa Indonesia',
-  'ภาษาไทย', 'Română', 'Ελληνικά', 'Magyar', 'Čeština',
-  'Svenska', 'Norsk', 'Suomi', 'Dansk', 'हिन्दी', 'हिन्�'),index=1)
-
-if 'lang' not in st.session_state:
-    st.session_state.lang = lang
-st.divider()
+# Columna de idioma
+lang = 'Español'
 
 #------------------------------------------------------------
 #FUNCTIONS
