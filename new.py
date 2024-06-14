@@ -4,7 +4,7 @@ import google.generativeai as genai
 import re
 from PIL import Image
 import requests
-import PyPDF2
+import PyPDF4
 
 # CONFIGURACIÓN DE PÁGINA
 st.set_page_config(
