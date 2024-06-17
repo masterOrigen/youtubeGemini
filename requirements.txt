@@ -2,6 +2,7 @@ google-generativeai
 pandas
 numpy
 openpyxl
+genai
 
 
 
