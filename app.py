@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from PIL import Image
 import requests
-import genai
+import google.generativeai as genai
 
 # Configuración de la página
 st.set_page_config(
