@@ -2,7 +2,6 @@ google-generativeai
 pandas
 numpy
 openpyxl
-PyPDF4==1.27.0
 
 
 
