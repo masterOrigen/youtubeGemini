@@ -36,40 +36,43 @@ st.markdown("""
         color: black;
     }
     /* Estilo para nuestro toggle personalizado */
-    .custom-toggle .stRadio > div {
-        flex-direction: row-reverse;
-        justify-content: flex-end;
+    .custom-toggle .stCheckbox {
+        display: flex;
+        align-items: center;
     }
-    .custom-toggle .stRadio > div > label {
+    .custom-toggle .stCheckbox > label {
+        display: flex;
+        align-items: center;
+    }
+    .custom-toggle .stCheckbox > label > span {
         background-color: #f0f0f0;
         border: 1px solid black;
         border-radius: 20px;
-        padding: 2px;
-        width: 60px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        cursor: pointer;
+        width: 50px;
+        height: 26px;
+        position: relative;
         transition: all 0.3s ease;
         margin-left: 10px;
     }
-    .custom-toggle .stRadio > div > label::before {
+    .custom-toggle .stCheckbox > label > span::before {
         content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
         background-color: black;
-        width: 26px;
-        height: 26px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         transition: all 0.3s ease;
     }
-    .custom-toggle .stRadio > div > label:has(input:checked) {
+    .custom-toggle .stCheckbox > label > input:checked + span {
         background-color: black;
-        justify-content: flex-end;
     }
-    .custom-toggle .stRadio > div > label:has(input:checked)::before {
+    .custom-toggle .stCheckbox > label > input:checked + span::before {
         background-color: white;
+        transform: translateX(24px);
     }
-    .custom-toggle .stRadio > div > label > span {
+    .custom-toggle .stCheckbox > label > div {
         display: none;
     }
     </style>
@@ -83,11 +86,10 @@ def custom_toggle(label, key):
     with col2:
         with st.container():
             st.markdown('<div class="custom-toggle">', unsafe_allow_html=True)
-            value = st.radio("", ["Off", "On"], horizontal=True, key=key, label_visibility="collapsed")
+            value = st.checkbox("", key=key, label_visibility="collapsed")
             st.markdown('</div>', unsafe_allow_html=True)
-    return value == "On"
+    return value
 
-# El resto del código permanece igual
 # HEADER
 st.markdown('''
 GEMINI AI  <img src="https://seeklogo.com/images/G/google-ai-logo-996E85F6FD-seeklogo.com.png" width="20" height="20">
@@ -196,7 +198,6 @@ with cols[3]:
     else:
         graphviz_mode = custom_toggle("Graphviz mode", "graphviz_toggle")
 
-# El resto del código permanece igual
 if image_atachment:
     if lang == 'Español':
       image = st.file_uploader("Sube tu imagen", type=['png', 'jpg', 'jpeg'])
