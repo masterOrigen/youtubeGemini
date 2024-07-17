@@ -56,6 +56,9 @@ st.markdown("""
     .stToggle > div[role="switch"][aria-checked="true"] > label::before {
         transform: translateX(1.2em) !important;
     }
+    .st-bm {
+  color: black;
+}
     </style>
     """, unsafe_allow_html=True)
 
