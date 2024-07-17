@@ -13,7 +13,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# CSS personalizado con texto negro y toggles negros forzados
+# CSS personalizado con texto negro y toggles personalizados
 st.markdown("""
     <style>
     body {
@@ -35,32 +35,57 @@ st.markdown("""
     .stMarkdown {
         color: black;
     }
-    /* Estilos forzados para los toggles */
-    .stToggle > div[role="switch"] {
-        background-color: rgba(0, 0, 0, 0.2) !important;
+    /* Estilo para nuestro toggle personalizado */
+    .custom-toggle .stRadio > div {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
     }
-    .stToggle > div[role="switch"][aria-checked="true"] {
-        background-color: black !important;
+    .custom-toggle .stRadio > div > label {
+        background-color: #f0f0f0;
+        border: 1px solid black;
+        border-radius: 20px;
+        padding: 2px;
+        width: 60px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        cursor: pointer;
+        transition: all 0.3s ease;
     }
-    .stToggle > div[role="switch"]::before {
-        background-color: white !important;
+    .custom-toggle .stRadio > div > label::before {
+        content: '';
+        background-color: black;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
     }
-    /* Ocultar el toggle original y crear un nuevo estilo */
-    .stToggle > div[role="switch"] > label {
-        background-color: black !important;
-        border-color: black !important;
+    .custom-toggle .stRadio > div > label:has(input:checked) {
+        background-color: black;
+        justify-content: flex-end;
     }
-    .stToggle > div[role="switch"] > label::before {
-        background-color: white !important;
+    .custom-toggle .stRadio > div > label:has(input:checked)::before {
+        background-color: white;
     }
-    .stToggle > div[role="switch"][aria-checked="true"] > label::before {
-        transform: translateX(1.2em) !important;
+    .custom-toggle .stRadio > div > label > span {
+        display: none;
     }
-    .st-bm {
-  color: black;
-}
     </style>
     """, unsafe_allow_html=True)
+
+# Función para crear un toggle personalizado
+def custom_toggle(label, key):
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.write(label)
+    with col2:
+        with st.container():
+            st.markdown('<div class="custom-toggle">', unsafe_allow_html=True)
+            value = st.radio("", ["Off", "On"], horizontal=True, key=key, label_visibility="collapsed")
+            st.markdown('</div>', unsafe_allow_html=True)
+    return value == "On"
 
 # HEADER
 st.markdown('''
@@ -144,29 +169,31 @@ if len(st.session_state.chat_session) > 0:
                     st.image(message['user']['parts'][1], width=200)
         count += 1
 
-cols=st.columns(4)
+cols = st.columns(4)
 
 with cols[0]:
     if lang == 'Español':
-      image_atachment = st.toggle("Adjuntar imagen", value=False, help="Activa este modo para adjuntar una imagen y que el chatbot pueda leerla")
+        image_atachment = custom_toggle("Adjuntar imagen", "image_toggle")
     else:
-      image_atachment = st.toggle("Attach image", value=False, help="Activate this mode to attach an image and let the chatbot read it")
+        image_atachment = custom_toggle("Attach image", "image_toggle")
 
 with cols[1]:
     if lang == 'Español':
-      txt_atachment = st.toggle("Adjuntar archivo de texto", value=False, help="Activa este modo para adjuntar un archivo de texto y que el chatbot pueda leerlo")
+        txt_atachment = custom_toggle("Adjuntar archivo de texto", "txt_toggle")
     else:
-      txt_atachment = st.toggle("Attach text file", value=False, help="Activate this mode to attach a text file and let the chatbot read it")
+        txt_atachment = custom_toggle("Attach text file", "txt_toggle")
+
 with cols[2]:
     if lang == 'Español':
-      csv_excel_atachment = st.toggle("Adjuntar CSV o Excel", value=False, help="Activa este modo para adjuntar un archivo CSV o Excel y que el chatbot pueda leerlo")
+        csv_excel_atachment = custom_toggle("Adjuntar CSV o Excel", "csv_excel_toggle")
     else:
-      csv_excel_atachment = st.toggle("Attach CSV or Excel", value=False, help="Activate this mode to attach a CSV or Excel file and let the chatbot read it")
+        csv_excel_atachment = custom_toggle("Attach CSV or Excel", "csv_excel_toggle")
+
 with cols[3]:
     if lang == 'Español':
-      graphviz_mode = st.toggle("Modo graphviz", value=False, help="Activa este modo para generar un grafo con graphviz en .dot a partir de tu mensaje")
+        graphviz_mode = custom_toggle("Modo graphviz", "graphviz_toggle")
     else:
-      graphviz_mode = st.toggle("Graphviz mode", value=False, help="Activate this mode to generate a graph with graphviz in .dot from your message")
+        graphviz_mode = custom_toggle("Graphviz mode", "graphviz_toggle")
 
 if image_atachment:
     if lang == 'Español':
