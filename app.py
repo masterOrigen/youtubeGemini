@@ -17,7 +17,7 @@ st.set_page_config(
 st.markdown("""
     <style>
     body {
-        color: #333333;
+        color: #333333 !important;
         background-color: white;
     }
     .stApp {
