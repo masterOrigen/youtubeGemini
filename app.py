@@ -5,7 +5,15 @@ import re
 from PIL import Image
 import requests
 
-# CSS personalizado para texto gris oscuro y fondo blanco
+# Configuración de la página
+st.set_page_config(
+    page_title="Google AI Chat",
+    page_icon="https://seeklogo.com/images/G/google-ai-logo-996E85F6FD-seeklogo.com.png",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
+# CSS personalizado
 st.markdown("""
     <style>
     body {
@@ -26,13 +34,6 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
-
-st.set_page_config(
-    page_title="Google AI Chat",
-    page_icon="https://seeklogo.com/images/G/google-ai-logo-996E85F6FD-seeklogo.com.png",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
 
 # HEADER
 st.markdown('''
