@@ -13,7 +13,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# CSS personalizado con texto negro
+# CSS personalizado con texto negro y toggles negros
 st.markdown("""
     <style>
     body {
@@ -34,6 +34,16 @@ st.markdown("""
     }
     .stMarkdown {
         color: black;
+    }
+    /* Estilos para los toggles */
+    .stToggle > div[role="switch"] {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+    }
+    .stToggle > div[role="switch"][aria-checked="true"] {
+        background-color: black !important;
+    }
+    .stToggle > div[role="switch"]::before {
+        background-color: white !important;
     }
     </style>
     """, unsafe_allow_html=True)
