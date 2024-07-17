@@ -24,13 +24,13 @@ st.markdown("""
         background-color: white;
     }
     .stTextInput > div > div > input {
-        color: #333333;
+        color: #333333 !important;
     }
     .stTextArea textarea {
-        color: #333333;
+        color: #333333 !important;
     }
     .stSelectbox > div > div > select {
-        color: #333333;
+        color: #333333 !important;
     }
     </style>
     """, unsafe_allow_html=True)
