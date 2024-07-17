@@ -13,24 +13,27 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# CSS personalizado
+# CSS personalizado con texto negro
 st.markdown("""
     <style>
     body {
-        color: #333333 !important;
+        color: black;
         background-color: white;
     }
     .stApp {
         background-color: white;
     }
     .stTextInput > div > div > input {
-        color: #333333 !important;
+        color: black;
     }
     .stTextArea textarea {
-        color: #333333 !important;
+        color: black;
     }
     .stSelectbox > div > div > select {
-        color: #333333 !important;
+        color: black;
+    }
+    .stMarkdown {
+        color: black;
     }
     </style>
     """, unsafe_allow_html=True)
