@@ -37,9 +37,8 @@ st.markdown("""
     }
     /* Estilo para nuestro toggle personalizado */
     .custom-toggle .stRadio > div {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
     }
     .custom-toggle .stRadio > div > label {
         background-color: #f0f0f0;
@@ -53,6 +52,7 @@ st.markdown("""
         justify-content: flex-start;
         cursor: pointer;
         transition: all 0.3s ease;
+        margin-left: 10px;
     }
     .custom-toggle .stRadio > div > label::before {
         content: '';
@@ -87,6 +87,7 @@ def custom_toggle(label, key):
             st.markdown('</div>', unsafe_allow_html=True)
     return value == "On"
 
+# El resto del código permanece igual
 # HEADER
 st.markdown('''
 GEMINI AI  <img src="https://seeklogo.com/images/G/google-ai-logo-996E85F6FD-seeklogo.com.png" width="20" height="20">
@@ -195,6 +196,7 @@ with cols[3]:
     else:
         graphviz_mode = custom_toggle("Graphviz mode", "graphviz_toggle")
 
+# El resto del código permanece igual
 if image_atachment:
     if lang == 'Español':
       image = st.file_uploader("Sube tu imagen", type=['png', 'jpg', 'jpeg'])
