@@ -13,7 +13,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# CSS personalizado con texto negro y toggles negros
+# CSS personalizado con texto negro y toggles negros forzados
 st.markdown("""
     <style>
     body {
@@ -35,7 +35,7 @@ st.markdown("""
     .stMarkdown {
         color: black;
     }
-    /* Estilos para los toggles */
+    /* Estilos forzados para los toggles */
     .stToggle > div[role="switch"] {
         background-color: rgba(0, 0, 0, 0.2) !important;
     }
@@ -44,6 +44,17 @@ st.markdown("""
     }
     .stToggle > div[role="switch"]::before {
         background-color: white !important;
+    }
+    /* Ocultar el toggle original y crear un nuevo estilo */
+    .stToggle > div[role="switch"] > label {
+        background-color: black !important;
+        border-color: black !important;
+    }
+    .stToggle > div[role="switch"] > label::before {
+        background-color: white !important;
+    }
+    .stToggle > div[role="switch"][aria-checked="true"] > label::before {
+        transform: translateX(1.2em) !important;
     }
     </style>
     """, unsafe_allow_html=True)
