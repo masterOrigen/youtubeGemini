@@ -25,9 +25,11 @@ st.markdown("""
     }
     .stTextInput > div > div > input {
         color: black;
+        background-color: white;
     }
     .stTextArea textarea {
         color: black;
+        background-color: white;
     }
     .stSelectbox > div > div > select {
         color: black;
@@ -80,6 +82,17 @@ st.markdown("""
     }
     .custom-toggle .stCheckbox > label > div {
         display: none;
+    }
+    /* Estilo para el nombre de la imagen y el texto de la URL */
+    .uploadedFileName {
+        color: black !important;
+    }
+    .stFileUploader > div > div > div {
+        color: black !important;
+    }
+    /* Estilo para el área de texto */
+    .stTextInput > div {
+        background-color: white;
     }
     </style>
     """, unsafe_allow_html=True)
