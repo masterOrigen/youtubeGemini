@@ -92,7 +92,6 @@ def custom_toggle(label, key):
         st.markdown('</div>', unsafe_allow_html=True)
     return value
 
-# El resto del código permanece igual
 # HEADER
 st.markdown('''
 GEMINI AI  <img src="https://seeklogo.com/images/G/google-ai-logo-996E85F6FD-seeklogo.com.png" width="20" height="20">
@@ -103,10 +102,6 @@ lang = 'Español'
 st.divider()
 
 # FUNCTIONS
-def extract_graphviz_info(text: str) -> list[str]:
-    graphviz_info = text.split('```')
-    return [graph for graph in graphviz_info if ('graph' in graph or 'digraph' in graph) and ('{' in graph and '}' in graph)]
-
 def append_message(message: dict) -> None:
     st.session_state.chat_session.append({'user': message})
     return
@@ -141,7 +136,7 @@ if 'welcome' not in st.session_state or lang != st.session_state.lang:
     st.session_state.lang = lang
     welcome = model.generate_content(f'''
     Da un saludo de bienvenida al usuario y sugiere que puede hacer
-    (Puedes describir imágenes, responder preguntas, leer archivos texto, leer tablas,generar gráficos con graphviz, etc)
+    (Puedes describir imágenes, responder preguntas, leer archivos texto, leer tablas, etc)
     eres un chatbot en una aplicación de chat creada en streamlit y python. generate the answer in {lang}''')
     welcome.resolve()
     st.session_state.welcome = welcome
@@ -158,16 +153,6 @@ if len(st.session_state.chat_session) > 0:
         if message['user']['role'] == 'model':
             with st.chat_message('ai'):
                 st.write(message['user']['parts'])
-                graphs = extract_graphviz_info(message['user']['parts'])
-                if len(graphs) > 0:
-                    for graph in graphs:
-                        st.graphviz_chart(graph,use_container_width=False)
-                        if lang == 'Español':
-                          view = "Ver texto"
-                        else:
-                          view = "View text"
-                        with st.expander(view):
-                          st.code(graph, language='dot')
         else:
             with st.chat_message('user'):
                 st.write(message['user']['parts'][0])
@@ -175,7 +160,7 @@ if len(st.session_state.chat_session) > 0:
                     st.image(message['user']['parts'][1], width=200)
         count += 1
 
-cols = st.columns(4)
+cols = st.columns(3)
 
 with cols[0]:
     if lang == 'Español':
@@ -195,13 +180,6 @@ with cols[2]:
     else:
         csv_excel_atachment = custom_toggle("Attach CSV or Excel", "csv_excel_toggle")
 
-with cols[3]:
-    if lang == 'Español':
-        graphviz_mode = custom_toggle("Modo graphviz", "graphviz_toggle")
-    else:
-        graphviz_mode = custom_toggle("Graphviz mode", "graphviz_toggle")
-
-# El resto del código permanece igual
 if image_atachment:
     if lang == 'Español':
       image = st.file_uploader("Sube tu imagen", type=['png', 'jpg', 'jpeg'])
@@ -249,12 +227,6 @@ if prompt:
         except:
             df = pd.read_excel(csvexcelattachment)
         txt += '   Dataframe: \n' + str(df)
-
-    if graphviz_mode:
-        if lang == 'Español':
-          txt += '   Genera un grafo con graphviz en .dot \n'
-        else:
-          txt += '   Generate a graph with graphviz in .dot \n'
 
     if len(txt) > 5000:
         txt = txt[:5000] + '...'
