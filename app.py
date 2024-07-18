@@ -36,9 +36,16 @@ st.markdown("""
         color: black;
     }
     /* Estilo para nuestro toggle personalizado */
-    .custom-toggle .stCheckbox {
+    .custom-toggle {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+    }
+    .custom-toggle .toggle-label {
+        margin-right: 10px;
+    }
+    .custom-toggle .stCheckbox {
+        height: 26px;
     }
     .custom-toggle .stCheckbox > label {
         display: flex;
@@ -52,7 +59,6 @@ st.markdown("""
         height: 26px;
         position: relative;
         transition: all 0.3s ease;
-        margin-left: 10px;
     }
     .custom-toggle .stCheckbox > label > span::before {
         content: '';
@@ -80,16 +86,13 @@ st.markdown("""
 
 # Función para crear un toggle personalizado
 def custom_toggle(label, key):
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.write(label)
-    with col2:
-        with st.container():
-            st.markdown('<div class="custom-toggle">', unsafe_allow_html=True)
-            value = st.checkbox("", key=key, label_visibility="collapsed")
-            st.markdown('</div>', unsafe_allow_html=True)
+    with st.container():
+        st.markdown(f'<div class="custom-toggle"><span class="toggle-label">{label}</span>', unsafe_allow_html=True)
+        value = st.checkbox("", key=key, label_visibility="collapsed")
+        st.markdown('</div>', unsafe_allow_html=True)
     return value
 
+# El resto del código permanece igual
 # HEADER
 st.markdown('''
 GEMINI AI  <img src="https://seeklogo.com/images/G/google-ai-logo-996E85F6FD-seeklogo.com.png" width="20" height="20">
@@ -198,6 +201,7 @@ with cols[3]:
     else:
         graphviz_mode = custom_toggle("Graphviz mode", "graphviz_toggle")
 
+# El resto del código permanece igual
 if image_atachment:
     if lang == 'Español':
       image = st.file_uploader("Sube tu imagen", type=['png', 'jpg', 'jpeg'])
